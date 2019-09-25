@@ -1,0 +1,169 @@
+public class BST
+{
+	private class treenode
+	{
+		Comparable data;
+		treenode left;
+		treenode right;
+	}
+	treenode root;
+	int count;
+	
+	public BST()
+	{
+		root=null; count=0;
+	}
+	
+	public void makeEmpty() { root=null; count=0; }
+	public boolean isEmpty() { return count<=0; }
+	public boolean isFull() { return false; }
+	public int size() { return count; }
+	
+	public Comparable lookup(Comparable x)
+	{
+		return lookhelp(root,x);
+	}
+	
+	private Comparable lookhelp(treenode r, Comparable x)
+	{
+		if(r==null) return null;
+		if(x.compareTo(r.data)==0) return r.data;
+		if(x.compareTo(r.data)<0)
+			return lookhelp(r.left,x);
+		else
+			return lookhelp(r.right,x);
+	}
+	
+	public void insert(Comparable x)
+	{
+		root=inserthelp(root,x);
+	}
+	private treenode inserthelp(treenode r, Comparable x)
+		// returns the new root of the subtree we insert into
+	{
+		if(r==null) // empty subtree
+		{
+			treenode newnode=new treenode();
+			newnode.data=x;
+			newnode.left=newnode.right=null;
+			count++;
+			return newnode;
+		}
+		if(x.compareTo(r.data)<0) // x is smaller
+		{
+			r.left=inserthelp(r.left,x);
+			return r;
+		}
+		else
+		{
+			r.right=inserthelp(r.right,x);
+			return r;
+		}
+	}
+	
+	public Comparable delete(Comparable x)
+	{
+		root=delh(root,x);
+		return saveditemtodelete;
+	}
+	Comparable saveditemtodelete;
+	private treenode delh(treenode r, Comparable x)
+	{
+		if(r==null) 
+		{
+			saveditemtodelete=null;
+			return r;
+		}
+		if(r.data.compareTo(x)==0)
+		{
+			// do the deletion
+			// 0 children case
+			if(r.left==null && r.right==null)
+			{
+				saveditemtodelete=r.data;
+				count--;
+				return null;
+			}
+			if(r.right==null) // one left child
+			{
+				saveditemtodelete=r.data;
+				count--;
+				return r.left;
+			}
+			if(r.left==null) // one right child
+			{
+				saveditemtodelete=r.data;
+				count--;
+				return r.right;
+			}
+			// we have two children
+			Comparable is=min(r.right);
+			//r.data=is;
+			r.right=delh(r.right,is);
+			saveditemtodelete=r.data;
+			r.data=is;
+			return r;
+		}
+		if(r.data.compareTo(x)>0)
+		{
+			r.left=delh(r.left,x);
+			return r;
+		}
+		else
+		{
+			r.right=delh(r.right,x);
+			return r;
+		}
+	}
+	
+	private Comparable min(treenode r)
+	{
+		if(r==null) return null;
+		if(r.left==null) return r.data;
+		return min(r.left);
+	}
+	
+	public void print() { printhelp(root); }
+	private void printhelp(treenode r)
+	{
+		if(r==null) return;
+		printhelp(r.left);
+		System.out.println(r.data);
+		printhelp(r.right);
+	}
+	
+	Queue Q;
+	
+	public static final int PREORDER=0;
+	public static final int INORDER=1;
+	public static final int POSTORDER=2;
+	
+	public void reset(int order)
+	{
+		if(Q==null)
+			Q=new QueueLL();
+		else
+			Q.makeEmpty();
+		traversal(root,order);
+	}
+	
+	private void traversal(treenode r, int order)
+	{
+		if(r==null) return;
+		if(order==PREORDER) Q.enqueue(r.data);
+		traversal(r.left,order);
+		if(order==INORDER) Q.enqueue(r.data);
+		traversal(r.right,order);
+		if(order==POSTORDER) Q.enqueue(r.data);
+	}
+	
+	public Comparable getNext()
+	{
+		return (Comparable) Q.dequeue();
+	}
+	public boolean hasNext()
+	{
+		return !Q.isEmpty();
+	}
+	
+}

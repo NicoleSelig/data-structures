@@ -1,0 +1,12 @@
+public interface SortedList
+{
+	public void insert(Comparable x);
+	public Comparable delete(int pos);
+	public Comparable get(int pos);
+	public Comparable lookup(Comparable searchkey);
+	
+	public int size();
+	public boolean isEmpty();
+	public boolean isFull();
+	public void makeEmpty();
+}

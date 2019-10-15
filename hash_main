@@ -1,0 +1,27 @@
+import java.io.*;
+import java.util.*;
+
+class HashMain
+{
+	
+	
+	public static void main(String [] args) throws IOException
+	{
+		Scanner file=new Scanner(new FileReader("fishfile.txt"));
+		int fishcount=file.nextInt();
+		
+		// Hash table of fish
+		HashMap<String,Fish> h;
+		h=new HashMap<String,Fish>();
+		
+		// load the fish
+		for(int i=0; i<fishcount; i++)
+		{
+			Fish f=new Fish(file);
+			h.put(f.getName(),f);
+		}
+		
+		Fish g=h.get("Nemo");
+		System.out.println(g);
+	}
+}

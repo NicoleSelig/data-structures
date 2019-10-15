@@ -1,0 +1,72 @@
+public class Heap implements PQ
+{
+	Comparable [] tree;
+	int last;
+	
+	public Heap(int maxsize)
+	{
+		last=0;
+		tree=new Comparable[maxsize+1];
+	}
+	
+	public void enqueue(Comparable x)
+	{
+		if(isFull()) return; // no nothing
+		tree[++last]=x;
+		bubbleup(last);
+	}
+	
+	private void bubbleup(int pos)
+	{
+		// base cases
+		// at the root
+		if(pos==1) return;
+		// parent is smaller
+		if(tree[pos].compareTo(tree[parent(pos)])>=0) return;
+		// recursive case
+		swap(pos,parent(pos));
+		bubbleup(parent(pos));
+	}
+	
+	public Comparable dequeue()
+	{
+		if(isEmpty()) return null;
+		// copy out root to return
+		Comparable root=tree[1];
+		// move last item to the root
+		tree[1]=tree[last--];
+		// bubble down
+		bubbledown(1);
+		return root;
+	}
+	private int parent(int i) {return i/2;}
+	private int lchild(int i) {return 2*i;}
+	private int rchild(int i) {return 2*i+1;}
+	private void swap(int x,int y)
+		{ Comparable tmp=tree[x]; tree[x]=tree[y]; tree[y]=tmp; }
+	
+	private void bubbledown(int pos)
+	{
+		// base cases
+		if(lchild(pos)>last) return; // no children
+		// find the smaller child
+		int runt=lchild(pos);
+		// if the rchild exists and is smaller than the left
+		if(rchild(pos)<=last && 
+			tree[rchild(pos)].compareTo(tree[lchild(pos)])<0)
+			runt=rchild(pos); // the right child is the runt
+		// if the runt is larger, we have a base case
+		if(tree[runt].compareTo(tree[pos])>=0) return;
+		// recursive case
+		swap(runt,pos);
+		bubbledown(runt);
+	}
+	
+	public Comparable getFront()
+	  { return isEmpty()?null:tree[1]; }
+	
+	public boolean isEmpty() { return last<=0; }
+	public boolean isFull() { return last+1>=tree.length; }
+	public int size() { return last; }
+	public void makeEmpty() { last=0; }
+}

@@ -1,0 +1,39 @@
+import java.io.*;
+import java.util.*;
+
+class SortMain
+{
+	
+	
+	public static void main(String [] args) throws IOException
+	{
+		Scanner file=new Scanner(new FileReader("fishfile.txt"));
+		int fishcount=file.nextInt();
+		
+		// line of fish
+		Fish [] school=new Fish[fishcount];
+		
+		// load the fish
+		for(int i=0; i<fishcount; i++)
+			school[i]=new Fish(file);
+		
+		/*
+		for(int pos=0; pos<school.length; pos++)
+			System.out.println(school[pos]);
+		
+		System.out.println("--");
+		Sorts.stripeinsertion(school,2,1);
+		*/
+		
+		Sorts.merge(school);
+		
+		for(int pos=0; pos<school.length; pos++)
+			System.out.println(school[pos]);
+		
+		Integer [] list=new Integer[100];
+		for(int i=0; i<list.length; i++)
+			list[i]=new Integer( (int)(100*Math.random()) );
+		Sorts.shell(list);
+		
+	}
+}

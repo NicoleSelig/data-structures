@@ -1,0 +1,28 @@
+import java.io.*;
+import java.util.*;
+
+class QueueMain
+{
+	
+	
+	public static void main(String [] args) throws IOException
+	{
+		Scanner file=new Scanner(new FileReader("fishfile.txt"));
+		int fishcount=file.nextInt();
+		
+		// line of fish
+		//Queue Q=new QueueDonut(100);
+		Queue Q=new QueueLL();
+		
+		// load the fish
+		for(int i=0; i<fishcount; i++)
+			Q.enqueue(new Fish(file));
+		
+		System.out.println("Queue size="+Q.size());
+		System.out.println("Queue front="+Q.getFront());
+		
+		System.out.println("Dequeuing Fish:");
+		while(!Q.isEmpty())
+			System.out.println(Q.dequeue());
+	}
+}
